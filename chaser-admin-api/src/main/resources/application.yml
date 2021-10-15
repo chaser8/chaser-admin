@@ -1,14 +1,14 @@
 server:
   port: 9002
   servlet:
-    context-path: /rop/agent
+    context-path: /admin/api
   tomcat:
     uri-encoding: UTF-8
     accept-count: 200
     max-threads: 300
 spring:
   application:
-    name: rop-agent-api
+    name: chaser-admin-api
   datasource:
     url: jdbc:mysql://cdcconline.com:8306/quanyi-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: quanyi-dev-user
@@ -21,13 +21,12 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
 logging:
-  config: classpath:logging-prod.xml
+  config: classpath:logging-dev.xml
   level:
     top.chaser.framework.boot: debug
     root: info
-    com.cdcconline.rop.api.call.CallApi: trace
-    com.cdcconline.rop.mapper: trace
-    com.cdcconline.rop: debug
+    top.chaser.admin.api.mapper: trace
+    top.chaser.admin.api: debug
   logback:
     rollingpolicy:
       max-file-size: 100MB
@@ -35,7 +34,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-  base-packages: com.cdcconline.rop
+#  base-packages: com.cdcconline.rop
   mapper-locations: "classpath*:mapper/*.xml"
 pagehelper:
   #  helperDialect：分页插件会自动检测当前的数据库链接，自动选择合适的分页方式。 你可以配置helperDialect属性来指定分页插件使用哪种方言。配置时，可以使用下面的缩写值：
@@ -54,22 +53,6 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-chaser:
-  logging:
-    enable: true
-    processors:
-      - processor-name: ropLoggingProcessor
-app:
-  node-id: 0
-  system-apis:
-    HX:
-      sys-code: HX
-      secret: "ENC(cDjyA2ZPUVaOmejcq63r33AVgUb+xY/18dKKTHVpoWMZH5OFYM0VTjjH/HoRVunZ)"
-    RIGHT_CENTER:
-      sys-code: CENTER
-      secret: "ENC(2S8yEsKoVGb/gYfc26rHSqf1t5i4NOjKIpZ096d9904tLYQL2H8YSjgklle4pZnv)" #b3813d87b8f04d35bbdb46c37e6c075f!@
-      call-api-bean: callCenterApi
-#      sys-api-url: ''
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
