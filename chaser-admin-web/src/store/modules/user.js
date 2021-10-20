@@ -32,8 +32,10 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ userCode: username.trim(), password: password }).then(response => {
         const { data } = response
+        data.token = data.accessToken
+        delete data.accessToken
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -46,17 +48,15 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo({}).then(response => {
         const { data } = response
 
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_NAME', data.nickname)
+        commit('SET_AVATAR', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/timg.jpg')
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -67,7 +67,7 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout({}).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')

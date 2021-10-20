@@ -32,22 +32,22 @@ module.exports = {
   devServer: {
     proxy: {
       '/': {
-        target: 'http://45.105.124.130:8081',
+        target: 'http://127.0.0.1:9002',
         ws: false,
         secure: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/dev-api': ''
+          '^/dev-api/vue-admin-template': '/admin/api'
         }
       }
-    }
-    // ,
+    },
     // port: port,
     // open: false,
-    // overlay: {
-    //   warnings: false,
-    //   errors: true
-    // },
+    overlay: {
+      warnings: false,
+      errors: true
+    }
+    // ,
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {

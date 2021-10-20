@@ -74,6 +74,10 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>top.chaser.framework</groupId>
+            <artifactId>chaser-starter-uaa-authorization-server</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <resources>

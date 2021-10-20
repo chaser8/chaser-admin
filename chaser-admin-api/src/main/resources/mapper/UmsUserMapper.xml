@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.chaser.admin.api.mapper.UmsUserMapper">
+    <update id="incrementPasswordErrorTimes">
+        update ums_user
+        set pwd_error_cnt = pwd_error_cnt + 1
+        where username = #{userCode}
+          and status = '1000'
+    </update>
+    <update id="lock">
+        update ums_user
+        set status_cd = '2000'
+        where username = #{userCode}
+          and pwd_error_cnt >= #{maxPasswordErrorTimes}
+          and status != '2000'
+    </update>
+    <select id="queryUser" resultType="top.chaser.admin.api.controller.response.UserPageRes">
+        select
+        a.user_id,a.user_phone,a.username,a.icon,a.email,a.nick_name,a.note,a.create_time,a.login_time,a.status,
+        if(a.status='1000','有效','已冻结') statusName,
+        a.pwd_error_cnt,
+        (select group_concat(r.name separator ',') from ums_user_role_relation ur,ums_role r
+        where a.user_id = ur.user_id and r.id = ur.role_id and r.status='1000'
+        group by ur.user_id) role_name
+        from ums_user a
+        where 1=1
+        <if test="value!=null and value!=''">
+            and CONCAT(a.nick_name,a.user_phone,a.username) like CONCAT('%',#{value},'%')
+        </if>
+        <if test="status!=null and status!=''">
+            and a.status = #{status}
+        </if>
+    </select>
+</mapper>
+
