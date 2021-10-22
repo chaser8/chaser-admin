@@ -16,10 +16,7 @@ import top.chaser.framework.common.web.session.User;
 import top.chaser.framework.starter.uaa.authorization.service.UaaUserDetailsService;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserDetailsServiceImpl  extends UaaUserDetailsService {
@@ -62,6 +59,11 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
         if(maxPasswordErrorTimes>0){
             lock(username);
         }
+    }
+
+    @Override
+    public void updateLastLoginTime(String userId) {
+        userService.updateByPrimaryKeySelective(new UmsUser().setUserId(Convert.toLong(userId)).setLoginTime(new Date()));
     }
 
     @Override

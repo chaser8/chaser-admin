@@ -6,24 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.Sqls;
-import top.chaser.admin.api.controller.request.UserAddReq;
-import top.chaser.admin.api.controller.request.UserNameCheckReq;
-import top.chaser.admin.api.controller.request.UserPageReq;
-import top.chaser.admin.api.controller.request.UserUpdateReq;
+import top.chaser.admin.api.controller.request.*;
 import top.chaser.admin.api.controller.response.UserNameCheckRes;
 import top.chaser.admin.api.controller.response.UserPageRes;
+import top.chaser.admin.api.controller.response.UserRoleGetRes;
 import top.chaser.admin.api.entity.UmsUser;
+import top.chaser.admin.api.service.UmsUserRoleRelationService;
 import top.chaser.admin.api.service.UmsUserService;
 import top.chaser.framework.common.base.util.BeanUtil;
-import top.chaser.framework.common.base.util.JSONUtil;
 import top.chaser.framework.common.web.annotation.RestPatchMapping;
 import top.chaser.framework.common.web.annotation.RestPostMapping;
 import top.chaser.framework.common.web.controller.BaseController;
 import top.chaser.framework.common.web.response.R;
 
-import java.util.Map;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
@@ -31,6 +29,9 @@ import java.util.Map;
 public class UserController extends BaseController {
     @Autowired
     private UmsUserService userService;
+
+    @Autowired
+    private UmsUserRoleRelationService userRoleRelationService;
 
     @RestPostMapping(value = "page")
     public R<PageInfo<UserPageRes>> page(@RequestBody UserPageReq userPageReq) {
@@ -51,4 +52,28 @@ public class UserController extends BaseController {
     public R<Void> update(@RequestBody UserUpdateReq userUpdateReq) {
         return userService.updateByPrimaryKeySelective(BeanUtil.toBean(userUpdateReq, UmsUser.class)) > 0 ? R.success() : R.fail("更新失败");
     }
+
+    @RestPostMapping("getUserRoles")
+    public R<List<UserRoleGetRes>> getUserRoles(@RequestBody @Valid UserRoleGetReq userRoleGetReq) {
+        return R.success(userRoleRelationService.getUserRoles(userRoleGetReq));
+    }
+
+    @RestPostMapping("updateUserRoles")
+    public R<Void> updateUserRoles(@RequestBody @Valid UserRoleUpdateReq userRoleUpdateReq) {
+        userService.updateUserRoles(userRoleUpdateReq);
+        return R.success();
+    }
+
+    @RestPostMapping("freeze")
+    public R<Void> freeze(@RequestBody @Valid UserFreezeReq userFreezeReq) {
+        userService.updateByPrimaryKeySelective(new UmsUser().setUserId(userFreezeReq.getUserId()).setStatus("2000"));
+        return R.success();
+    }
+
+    @RestPostMapping("unfreeze")
+    public R<Void> unfreeze(@RequestBody @Valid UserFreezeReq userFreezeReq) {
+        userService.updateByPrimaryKeySelective(new UmsUser().setUserId(userFreezeReq.getUserId()).setStatus("1000").setPwdErrorCnt(0));
+        return R.success();
+    }
+
 }

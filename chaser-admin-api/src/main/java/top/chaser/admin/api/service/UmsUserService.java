@@ -2,6 +2,7 @@ package top.chaser.admin.api.service;
 
 import com.github.pagehelper.PageInfo;
 import top.chaser.admin.api.controller.request.UserPageReq;
+import top.chaser.admin.api.controller.request.UserRoleUpdateReq;
 import top.chaser.admin.api.controller.response.UserPageRes;
 import top.chaser.framework.starter.tkmybatis.service.IService;
 import top.chaser.admin.api.entity.UmsUser;
@@ -35,5 +36,7 @@ public interface UmsUserService extends IService<UmsUser> {
     void lock(String userCode,int maxPasswordErrorTimes);
 
     PageInfo<UserPageRes> query(UserPageReq userPageReq);
+
+    void updateUserRoles(UserRoleUpdateReq userRoleUpdateReq);
 }
 

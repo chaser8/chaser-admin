@@ -50,3 +50,33 @@ export function update(data) {
     data
   })
 }
+export function getUserRoles(data) {
+  return request({
+    url: '/vue-admin-template/user/getUserRoles',
+    method: 'post',
+    data
+  })
+}
+export function updateUserRoles(data) {
+  return request({
+    url: '/vue-admin-template/user/updateUserRoles',
+    method: 'post',
+    data
+  })
+}
+
+export function freeze(data) {
+  return request({
+    url: '/vue-admin-template/user/freeze',
+    method: 'post',
+    data
+  })
+}
+
+export function unfreeze(data) {
+  return request({
+    url: '/vue-admin-template/user/unfreeze',
+    method: 'post',
+    data
+  })
+}

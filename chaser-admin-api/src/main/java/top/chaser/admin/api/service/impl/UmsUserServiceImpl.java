@@ -3,10 +3,16 @@ package top.chaser.admin.api.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.Sqls;
 import top.chaser.admin.api.controller.request.UserPageReq;
+import top.chaser.admin.api.controller.request.UserRoleUpdateReq;
 import top.chaser.admin.api.controller.response.UserPageRes;
+import top.chaser.admin.api.entity.UmsUserRoleRelation;
 import top.chaser.admin.api.mapper.UmsUserMapper;
+import top.chaser.admin.api.service.UmsUserRoleRelationService;
 import top.chaser.admin.api.service.UmsUserService;
 
 import top.chaser.admin.api.entity.UmsUser;
@@ -16,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 后台用户表(UmsUser)表服务实现类
@@ -26,6 +33,9 @@ import java.util.List;
 @Slf4j
 @Service("umsUserService")
 public class UmsUserServiceImpl extends TkServiceImpl<UmsUser> implements UmsUserService {
+    @Autowired
+    private UmsUserRoleRelationService userRoleRelationService;
+
     /**
      * incrementPasswordErrorTimes
      *
@@ -50,18 +60,33 @@ public class UmsUserServiceImpl extends TkServiceImpl<UmsUser> implements UmsUse
      * @date 2021/6/10 3:13 下午
      */
     @Override
-    public void lock(String userCode,int maxPasswordErrorTimes) {
+    public void lock(String userCode, int maxPasswordErrorTimes) {
         UmsUserMapper mapper = (UmsUserMapper) this.mapper;
-        mapper.lock(userCode,maxPasswordErrorTimes);
+        mapper.lock(userCode, maxPasswordErrorTimes);
     }
 
     @Override
     public PageInfo<UserPageRes> query(UserPageReq userPageReq) {
-        PageInfo<UmsUser> page = page(BeanUtil.toBean(userPageReq, UmsUser.class), userPageReq.getPageNum(), userPageReq.getPageSize());
         PageHelper.startPage(userPageReq.getPageNum(), userPageReq.getPageSize());
         List<UserPageRes> list = ((UmsUserMapper) mapper).queryUser(userPageReq);
         PageInfo pageInfo = new PageInfo<>(list);
 
         return pageInfo;
+    }
+
+    @Override
+    @Transactional
+    public void updateUserRoles(UserRoleUpdateReq userRoleUpdateReq) {
+        userRoleRelationService.deleteByExample(
+                Example.builder(UmsUserRoleRelation.class)
+                        .where(Sqls.custom()
+                                .andEqualTo("userId", userRoleUpdateReq.getUserId()))
+                        .build());
+        List<UmsUserRoleRelation> userRoles = userRoleUpdateReq
+                .getRoleIds()
+                .stream()
+                .map(roleId -> new UmsUserRoleRelation().setRoleId(roleId).setUserId(userRoleUpdateReq.getUserId()))
+                .collect(Collectors.toList());
+        userRoleRelationService.insertList(userRoles);
     }
 }
