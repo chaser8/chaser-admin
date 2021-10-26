@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import top.chaser.admin.api.entity.UmsUser;
 import top.chaser.admin.api.service.UmsUserService;
@@ -76,8 +77,10 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
     }
 
     @Override
+    @Transactional
     public void lock(String username) {
         userService.lock(username, serverProperties.getMaxPasswordErrorTimes());
+
     }
 
     @Override

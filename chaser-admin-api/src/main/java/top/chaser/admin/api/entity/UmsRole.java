@@ -1,11 +1,11 @@
 package top.chaser.admin.api.entity;
 
 
-import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台用户角色表(UmsRole)实体类
  *
  * @author yzb
- * @since 2021-10-18 09:40:26
+ * @since 2021-10-25 14:51:01
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_role")
 public class UmsRole extends TkBaseEntity {
-    private static final long serialVersionUID = 430426698456916385L;
+    private static final long serialVersionUID = -72440605205342666L;
 
     @Column(name = "id")
     @Id
@@ -57,4 +57,10 @@ public class UmsRole extends TkBaseEntity {
     private String status;
     @Column(name = "sort")
     private Integer sort;
+    @Column(name = "create_user")
+    private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }

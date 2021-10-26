@@ -1,9 +1,8 @@
 package top.chaser.admin.api.controller.response;
 
-import com.github.pagehelper.PageInfo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import top.chaser.framework.common.base.page.PageParam;
 
 import java.util.Date;
 
@@ -37,6 +36,7 @@ public class UserPageRes{
     /**
      * 最后登录时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date loginTime;
     /**
      * 帐号启用状态：0->禁用；1->启用

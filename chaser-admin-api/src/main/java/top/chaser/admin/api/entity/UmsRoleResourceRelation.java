@@ -1,20 +1,19 @@
 package top.chaser.admin.api.entity;
 
 
-import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 后台角色资源关系表(UmsRoleResourceRelation)实体类
  *
  * @author yzb
- * @since 2021-10-18 09:40:27
+ * @since 2021-10-25 10:14:54
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +21,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_role_resource_relation")
 public class UmsRoleResourceRelation extends TkBaseEntity {
-    private static final long serialVersionUID = 859056415304898481L;
+    private static final long serialVersionUID = -71189526042422535L;
 
     @Column(name = "id")
     @Id

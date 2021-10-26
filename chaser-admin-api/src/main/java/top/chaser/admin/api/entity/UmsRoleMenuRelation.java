@@ -1,11 +1,11 @@
 package top.chaser.admin.api.entity;
 
 
-import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台角色菜单关系表(UmsRoleMenuRelation)实体类
  *
  * @author yzb
- * @since 2021-10-18 09:40:26
+ * @since 2021-10-25 10:14:54
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_role_menu_relation")
 public class UmsRoleMenuRelation extends TkBaseEntity {
-    private static final long serialVersionUID = 892256579292695590L;
+    private static final long serialVersionUID = 718795276135632928L;
 
     @Column(name = "id")
     @Id
@@ -40,4 +40,15 @@ public class UmsRoleMenuRelation extends TkBaseEntity {
      */
     @Column(name = "menu_id")
     private Long menuId;
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+    @Column(name = "create_user")
+    private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }

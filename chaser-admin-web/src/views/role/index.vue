@@ -1,9 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.value" placeholder="帐号/用户名/手机号模糊查询" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.value" placeholder="请输入角色名称迷糊查询" style="width: 200px;" class="filter-item" />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        新增
       </el-button>
     </div>
     <el-table
@@ -16,67 +19,73 @@
     >
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="帐号">
-        <template slot-scope="scope">
-          {{ scope.row.username }}
+      <el-table-column label="角色名">
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-input v-model="row.name" class="edit-input" size="small" />
+          </template>
+          <span v-else>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名">
-        <template slot-scope="scope">
-          {{ scope.row.nickName }}
+      <el-table-column label="描述">
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-input v-model="row.description" class="edit-input" size="small" />
+          </template>
+          <span v-else>{{ row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" width="110" align="center">
+      <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleName }}</span>
+          {{ scope.row.createTime }}
         </template>
       </el-table-column>
-      <el-table-column label="手机号" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.userPhone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="最后登录时间" width="160" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.loginTime }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="错误次数" width="100">
-        <template slot-scope="scope">
-          {{ scope.row.pwdErrorCnt }}
+      <el-table-column label="操作" align="center" width="240" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-button
+              v-if="row.edit"
+              class="cancel-btn"
+              size="mini"
+              icon="el-icon-refresh"
+              type="warning"
+              @click="cancelEdit(row)"
+            >
+              取消
+            </el-button>
+            <el-button
+              type="success"
+              size="mini"
+              icon="el-icon-circle-check-outline"
+              @click="confirmEdit(row)"
+            >
+              确认
+            </el-button>
+          </template>
+          <el-button v-else type="primary" size="mini" @click="edit(row)">
+            编辑
+          </el-button>
+          <el-button size="mini" type="danger" @click="del(row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="fetchData"/>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="fetchData" />
   </div>
 </template>
 
 <script>
-import {page} from '@/api/user'
+import {del, getRolePage, merge} from '@/api/role'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
-  components: {Pagination},
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
+  components: { Pagination },
   data() {
     return {
-      list: null,
+      list: [],
       listLoading: true,
       total: 0,
       listQuery: {
@@ -90,14 +99,70 @@ export default {
     this.fetchData()
   },
   methods: {
+    cancelEdit(row) {
+      row.edit = false
+      if (row.id === undefined) {
+        this.list.shift()
+      } else {
+        row.name = row.originalName
+        row.description = row.originalDescription
+      }
+    },
+    handleCreate() {
+      this.list.unshift({
+        name: '',
+        description: '',
+        edit: true
+      })
+    },
+    confirmEdit(row) {
+      row.edit = false
+      merge(row).then(_ => {
+        this.$notify({
+          title: '提示',
+          message: '更新成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.fetchData()
+      })
+    },
+    edit(row) {
+      console.dir(this.list)
+      console.dir(row)
+      row.edit = true
+    },
+    del(row) {
+      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        del({ id: row.id }).then(_ => {
+          this.$notify({
+            title: '提示',
+            message: '角色删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.fetchData()
+        })
+      })
+    },
     handleFilter() {
       this.listQuery.pageNum = 1
       this.fetchData()
     },
     fetchData() {
       this.listLoading = true
-      page(this.listQuery).then(response => {
-        this.list = response.data.list
+      getRolePage(this.listQuery).then(response => {
+        this.list = response.data.list.map(v => {
+          this.$set(v, 'edit', false)
+          v.originalName = v.name
+          v.originalDescription = v.description
+          return v
+        })
+
         this.total = response.data.total
         this.listLoading = false
       })

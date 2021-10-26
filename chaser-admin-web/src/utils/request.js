@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {Message, MessageBox} from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import {getToken} from '@/utils/auth'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 // create an axios instance
@@ -57,9 +57,18 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-
+      return Promise.reject(new Error(res.message || 'Error'))
+    } else {
+      return res
+    }
+  },
+  (error) => {
+    console.log('err' + error) // for debug
+    let message = error.message
+    if (error.response && 'data' in error.response && 'message' in error.response.data) {
+      message = error.response.data.message
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === '2004') {
+      if (error.response.code === '2004') {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
           confirmButtonText: 'Re-Login',
@@ -71,16 +80,6 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return res
-    }
-  },
-  (error) => {
-    console.log('err' + error) // for debug
-    let message = error.message
-    if (error.response && 'data' in error.response && 'message' in error.response.data) {
-      message = error.response.data.message
     }
     Message({
       message: message,

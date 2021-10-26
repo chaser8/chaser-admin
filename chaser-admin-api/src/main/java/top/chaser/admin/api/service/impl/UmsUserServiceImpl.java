@@ -1,25 +1,25 @@
 package top.chaser.admin.api.service.impl;
 
 
+import cn.hutool.core.convert.Convert;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
 import top.chaser.admin.api.controller.request.UserPageReq;
 import top.chaser.admin.api.controller.request.UserRoleUpdateReq;
 import top.chaser.admin.api.controller.response.UserPageRes;
+import top.chaser.admin.api.entity.UmsUser;
 import top.chaser.admin.api.entity.UmsUserRoleRelation;
 import top.chaser.admin.api.mapper.UmsUserMapper;
 import top.chaser.admin.api.service.UmsUserRoleRelationService;
 import top.chaser.admin.api.service.UmsUserService;
-
-import top.chaser.admin.api.entity.UmsUser;
-import top.chaser.framework.common.base.util.BeanUtil;
+import top.chaser.framework.common.web.session.SessionUtil;
 import top.chaser.framework.starter.tkmybatis.service.TkServiceImpl;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,10 +82,13 @@ public class UmsUserServiceImpl extends TkServiceImpl<UmsUser> implements UmsUse
                         .where(Sqls.custom()
                                 .andEqualTo("userId", userRoleUpdateReq.getUserId()))
                         .build());
+        Long userId = Convert.toLong(SessionUtil.getCurrentUser().getUserId());
         List<UmsUserRoleRelation> userRoles = userRoleUpdateReq
                 .getRoleIds()
                 .stream()
-                .map(roleId -> new UmsUserRoleRelation().setRoleId(roleId).setUserId(userRoleUpdateReq.getUserId()))
+                .map(roleId -> new UmsUserRoleRelation().setRoleId(roleId).setUserId(userRoleUpdateReq.getUserId())
+                        .setCreateUser(userId)
+                )
                 .collect(Collectors.toList());
         userRoleRelationService.insertList(userRoles);
     }

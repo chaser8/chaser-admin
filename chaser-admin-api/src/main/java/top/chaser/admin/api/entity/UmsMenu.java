@@ -1,11 +1,11 @@
 package top.chaser.admin.api.entity;
 
 
-import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.chaser.framework.starter.tkmybatis.model.TkBaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台菜单表(UmsMenu)实体类
  *
  * @author yzb
- * @since 2021-10-18 09:40:24
+ * @since 2021-10-25 10:14:53
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_menu")
 public class UmsMenu extends TkBaseEntity {
-    private static final long serialVersionUID = -81883652334946389L;
+    private static final long serialVersionUID = -38249673452603058L;
 
     @Column(name = "id")
     @Id
