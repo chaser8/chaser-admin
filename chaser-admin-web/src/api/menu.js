@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function delMenu(id) {
+  return request({
+    url: '/vue-admin-template/menu/' + id,
+    method: 'delete'
+  })
+}
+
 export function getLevelMenus() {
   const data = {}
   return request({

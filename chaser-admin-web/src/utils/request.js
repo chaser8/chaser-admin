@@ -25,6 +25,9 @@ service.interceptors.request.use(
       config.headers['Authorization'] = 'Bearer ' + getToken()
       config.headers['content-type'] = 'application/json'
       console.dir(config) // for debug
+      if (config.data === undefined) {
+        config.data = {}
+      }
     }
     return config
   },

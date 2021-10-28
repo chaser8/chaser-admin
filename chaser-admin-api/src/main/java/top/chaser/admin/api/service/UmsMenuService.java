@@ -16,5 +16,7 @@ public interface UmsMenuService extends IService<UmsMenu> {
     List<MenuRes> allLevelMenu();
 
     List<MenuRes> getChildren(Long menuId);
+
+    void deleteMenu(Long id);
 }
 

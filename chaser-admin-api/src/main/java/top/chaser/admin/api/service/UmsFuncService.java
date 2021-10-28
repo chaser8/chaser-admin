@@ -1,6 +1,7 @@
 package top.chaser.admin.api.service;
 
 import top.chaser.admin.api.controller.request.FuncPutReq;
+import top.chaser.admin.api.controller.request.FuncResourceRelPutReq;
 import top.chaser.admin.api.entity.UmsFunc;
 import top.chaser.framework.starter.tkmybatis.service.IService;
 
@@ -12,5 +13,9 @@ import top.chaser.framework.starter.tkmybatis.service.IService;
  */
 public interface UmsFuncService extends IService<UmsFunc> {
     void addFunc(FuncPutReq funcPutReq);
+
+    void deleteFunc(Long id);
+
+    void updateFuncRelResource(FuncResourceRelPutReq resourceRelPutReq);
 }
 

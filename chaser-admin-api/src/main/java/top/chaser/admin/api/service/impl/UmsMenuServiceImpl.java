@@ -7,11 +7,14 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
 import top.chaser.admin.api.controller.response.MenuRes;
 import top.chaser.admin.api.entity.UmsMenu;
+import top.chaser.admin.api.entity.UmsMenuFuncRelation;
 import top.chaser.admin.api.entity.UmsRole;
+import top.chaser.admin.api.service.UmsMenuFuncRelationService;
 import top.chaser.admin.api.service.UmsMenuService;
 import top.chaser.framework.common.base.util.BeanUtil;
 import top.chaser.framework.starter.tkmybatis.service.TkServiceImpl;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +28,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service("umsMenuService")
 public class UmsMenuServiceImpl extends TkServiceImpl<UmsMenu> implements UmsMenuService {
+    @Resource
+    private UmsMenuFuncRelationService menuFuncRelationService;
+
     @Override
     public List<MenuRes> allLevelMenu() {
         List<UmsMenu> umsMenus = mapper.selectByExample(Example.builder(UmsRole.class).orderBy("sort").build());
@@ -54,5 +60,11 @@ public class UmsMenuServiceImpl extends TkServiceImpl<UmsMenu> implements UmsMen
                 .stream()
                 .map(umsMenu -> BeanUtil.toBean(umsMenu, MenuRes.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteMenu(Long id) {
+        menuFuncRelationService.delete(new UmsMenuFuncRelation().setMenuId(id));
+        mapper.deleteByPrimaryKey(id);
     }
 }

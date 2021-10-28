@@ -78,7 +78,7 @@
           <el-table-column align="center" label="功能项名称" prop="name" />
           <el-table-column align="center" label="功能项编码" prop="code" />
         </template>
-        <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
             <template v-if="row.edit">
               <el-button
@@ -98,28 +98,38 @@
                 确认
               </el-button>
             </template>
-            <el-button v-else type="primary" size="mini" @click="edit(row)">
-              编辑
-            </el-button>
+            <template v-else>
+              <el-button type="primary" size="mini" @click="edit(row)">
+                编辑
+              </el-button>
+              <el-button v-if="!tableMenuFlag" type="danger" size="mini" @click="relResource(row)">
+                关联服务
+              </el-button>
+              <el-button type="danger" size="mini" @click="del(row)">
+                删除
+              </el-button>
+            </template>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
+    <func-resource-rel :func-id.sync="funcResourceRelFuncId" :show.sync="funcResourceRelShow" />
   </el-container>
-
 </template>
 
 <script>
-import {addMenu, getChildren, getLevelMenus, getMenuFunc} from '@/api/menu'
-import {addFunc} from '@/api/func'
+import {addMenu, delMenu, getChildren, getLevelMenus, getMenuFunc} from '@/api/menu'
+import {addFunc, delFunc} from '@/api/func'
+import FuncResourceRel from '@/views/permission/func-resource-rel'
 
 export default {
   name: 'MenuManage',
+  components: { FuncResourceRel },
   data() {
     const rootMenu = {
       id: '0',
       name: '系统菜单',
-      level: 1,
+      level: 0,
       children: []
     }
     return {
@@ -127,6 +137,8 @@ export default {
       listLoading: true,
       total: 0,
       tableMenuFlag: true,
+      funcResourceRelFuncId: undefined,
+      funcResourceRelShow: false,
       menuData: [rootMenu],
       currentMenu: rootMenu,
       defaultProps: {
@@ -141,6 +153,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    relResource(row) {
+      this.funcResourceRelFuncId = row.id
+      this.funcResourceRelShow = true
+    },
     loadMenus() {
       getLevelMenus().then(response => {
         this.menuData[0].children = response.data
@@ -188,6 +204,36 @@ export default {
     edit(row) {
       row.edit = true
     },
+    del(row) {
+      this.$confirm('此操作将删除信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.tableMenuFlag) {
+          delMenu(row.id).then(_ => {
+            this.$notify({
+              title: '提示',
+              message: '菜单删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.loadMenus()
+            this.fetchData()
+          })
+        } else {
+          delFunc(row.id).then(_ => {
+            this.$notify({
+              title: '提示',
+              message: '功能项删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.fetchData()
+          })
+        }
+      })
+    },
     confirmEdit(row) {
       if (this.tableMenuFlag) {
         addMenu(row).then(_ => {
@@ -213,6 +259,7 @@ export default {
       }
     },
     fetchData() {
+      this.list = []
       this.listLoading = true
       const that = this
       const initData = function(response) {

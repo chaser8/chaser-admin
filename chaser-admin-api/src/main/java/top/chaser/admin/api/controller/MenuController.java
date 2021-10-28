@@ -14,6 +14,7 @@ import top.chaser.admin.api.entity.UmsMenu;
 import top.chaser.admin.api.service.UmsMenuFuncRelationService;
 import top.chaser.admin.api.service.UmsMenuService;
 import top.chaser.framework.common.base.util.BeanUtil;
+import top.chaser.framework.common.web.annotation.RestDeleteMapping;
 import top.chaser.framework.common.web.annotation.RestGetMapping;
 import top.chaser.framework.common.web.annotation.RestPostMapping;
 import top.chaser.framework.common.web.annotation.RestPutMapping;
@@ -22,6 +23,7 @@ import top.chaser.framework.common.web.response.R;
 import top.chaser.framework.common.web.session.SessionUtil;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +67,12 @@ public class MenuController extends BaseController {
             umsMenu.setUpdateDate(new Date());
             menuService.updateByPrimaryKeySelective(umsMenu);
         }
+        return R.success();
+    }
+
+    @RestDeleteMapping("{id}")
+    public R<Void> delete(@Valid @NotNull @PathVariable("id") Long id) {
+        menuService.deleteMenu(id);
         return R.success();
     }
 }
