@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
-import top.chaser.admin.api.controller.request.RoleDeleteReq;
-import top.chaser.admin.api.controller.request.RoleMergeReq;
-import top.chaser.admin.api.controller.request.RolePageReq;
+import top.chaser.admin.api.controller.request.*;
 import top.chaser.admin.api.controller.response.RoleGetRes;
 import top.chaser.admin.api.controller.response.RolePageRes;
 import top.chaser.admin.api.entity.UmsRole;
+import top.chaser.admin.api.entity.UmsRoleMenuRelation;
+import top.chaser.admin.api.service.UmsRoleMenuRelationService;
 import top.chaser.admin.api.service.UmsRoleService;
 import top.chaser.framework.common.base.bean.Status;
 import top.chaser.framework.common.base.util.BeanUtil;
@@ -25,6 +25,7 @@ import top.chaser.framework.common.web.controller.BaseController;
 import top.chaser.framework.common.web.response.R;
 import top.chaser.framework.common.web.session.SessionUtil;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,8 @@ import java.util.stream.Collectors;
 public class RoleController extends BaseController {
     @Autowired
     private UmsRoleService roleService;
+    @Resource
+    private UmsRoleMenuRelationService roleMenuRelationService;
 
     @RestPostMapping("getRoles")
     public R<List<RoleGetRes>> getRoles() {
@@ -46,6 +49,17 @@ public class RoleController extends BaseController {
                 .stream().map(umsRole -> BeanUtil.toBean(umsRole, RoleGetRes.class))
                 .collect(Collectors.toList());
         return R.success(roles);
+    }
+
+    @RestPostMapping("getRoleMenus")
+    public R<List<Long>> getRoleMenus(@Valid @RequestBody RoleMenusGetReq roleMenusGetReq) {
+        return R.success(roleMenuRelationService.select(new UmsRoleMenuRelation().setRoleId(roleMenusGetReq.getRoleId())).stream().map(UmsRoleMenuRelation::getMenuId).collect(Collectors.toList()));
+    }
+
+    @RestPostMapping("updateRoleMenus")
+    public R<Void> updateRoleMenus(@Valid @RequestBody RoleMenusUpdateReq roleMenusUpdateReq) {
+        roleMenuRelationService.updateRoleMenus(roleMenusUpdateReq);
+        return R.success();
     }
 
     @RestPostMapping("getRolePage")

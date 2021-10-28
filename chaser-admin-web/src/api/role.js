@@ -29,3 +29,17 @@ export function del(data) {
     data
   })
 }
+export function getRoleMenus(data) {
+  return request({
+    url: '/vue-admin-template/role/getRoleMenus',
+    method: 'post',
+    data
+  })
+}
+export function updateRoleMenus(data) {
+  return request({
+    url: '/vue-admin-template/role/updateRoleMenus',
+    method: 'post',
+    data
+  })
+}

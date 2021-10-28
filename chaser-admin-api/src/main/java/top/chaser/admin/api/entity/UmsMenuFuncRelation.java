@@ -11,18 +11,18 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 后台用户角色和权限关系表(UmsRolePermissionRelation)实体类
+ * 后台角色菜单关系表(UmsMenuFuncRelation)实体类
  *
  * @author yzb
- * @since 2021-10-25 10:14:54
+ * @since 2021-10-27 17:22:53
  */
 @Accessors(chain = true)
 @Getter
 @Setter
 @ToString
-@Table(name = "ums_role_permission_relation")
-public class UmsRolePermissionRelation extends TkBaseEntity {
-    private static final long serialVersionUID = -71286925832264472L;
+@Table(name = "ums_menu_func_relation")
+public class UmsMenuFuncRelation extends TkBaseEntity {
+    private static final long serialVersionUID = -45421590573256073L;
 
     @Column(name = "id")
     @Id
@@ -30,10 +30,16 @@ public class UmsRolePermissionRelation extends TkBaseEntity {
     private Long id;
 
 
-    @Column(name = "role_id")
-    private Long roleId;
-    @Column(name = "permission_id")
-    private Long permissionId;
+    /**
+     * 菜单ID
+     */
+    @Column(name = "menu_id")
+    private Long menuId;
+    /**
+     * 功能点标识
+     */
+    @Column(name = "func_id")
+    private Long funcId;
     /**
      * 创建时间
      */
@@ -41,8 +47,4 @@ public class UmsRolePermissionRelation extends TkBaseEntity {
     private Date createTime;
     @Column(name = "create_user")
     private Long createUser;
-    @Column(name = "update_user")
-    private Long updateUser;
-    @Column(name = "update_date")
-    private Date updateDate;
 }

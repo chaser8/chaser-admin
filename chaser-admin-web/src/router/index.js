@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
+
+Vue.use(Router)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -70,6 +69,12 @@ export const constantRoutes = [
         name: '角色管理',
         component: () => import('@/views/role/index'),
         meta: { title: '角色管理', icon: 'table' }
+      },
+      {
+        path: 'permission',
+        name: '权限管理',
+        component: () => import('@/views/permission/index'),
+        meta: { title: '权限管理', icon: 'table' }
       }
     ]
   },

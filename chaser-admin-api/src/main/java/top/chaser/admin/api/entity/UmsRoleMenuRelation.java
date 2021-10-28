@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台角色菜单关系表(UmsRoleMenuRelation)实体类
  *
  * @author yzb
- * @since 2021-10-25 10:14:54
+ * @since 2021-10-27 17:22:53
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_role_menu_relation")
 public class UmsRoleMenuRelation extends TkBaseEntity {
-    private static final long serialVersionUID = 718795276135632928L;
+    private static final long serialVersionUID = 248522527097656822L;
 
     @Column(name = "id")
     @Id
@@ -47,8 +47,4 @@ public class UmsRoleMenuRelation extends TkBaseEntity {
     private Date createTime;
     @Column(name = "create_user")
     private Long createUser;
-    @Column(name = "update_user")
-    private Long updateUser;
-    @Column(name = "update_date")
-    private Date updateDate;
 }

@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台菜单表(UmsMenu)实体类
  *
  * @author yzb
- * @since 2021-10-25 10:14:53
+ * @since 2021-10-27 17:22:53
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_menu")
 public class UmsMenu extends TkBaseEntity {
-    private static final long serialVersionUID = -38249673452603058L;
+    private static final long serialVersionUID = -16545915839684413L;
 
     @Column(name = "id")
     @Id
@@ -41,11 +41,6 @@ public class UmsMenu extends TkBaseEntity {
     @Column(name = "create_time")
     private Date createTime;
     /**
-     * 菜单名称
-     */
-    @Column(name = "title")
-    private String title;
-    /**
      * 菜单级数
      */
     @Column(name = "level")
@@ -56,7 +51,7 @@ public class UmsMenu extends TkBaseEntity {
     @Column(name = "sort")
     private Integer sort;
     /**
-     * 前端名称
+     * 菜单名称
      */
     @Column(name = "name")
     private String name;
@@ -70,4 +65,22 @@ public class UmsMenu extends TkBaseEntity {
      */
     @Column(name = "hidden")
     private Integer hidden;
+    /**
+     * 编码
+     */
+    @Column(name = "code")
+    private String code;
+    /**
+     * 菜单地址
+     */
+    @Column(name = "url")
+    private String url;
+    @Column(name = "path")
+    private String path;
+    @Column(name = "create_user")
+    private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }

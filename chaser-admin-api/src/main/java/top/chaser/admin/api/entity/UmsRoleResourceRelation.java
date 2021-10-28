@@ -13,7 +13,7 @@ import javax.persistence.*;
  * 后台角色资源关系表(UmsRoleResourceRelation)实体类
  *
  * @author yzb
- * @since 2021-10-25 10:14:54
+ * @since 2021-10-27 17:22:53
  */
 @Accessors(chain = true)
 @Getter
@@ -21,7 +21,7 @@ import javax.persistence.*;
 @ToString
 @Table(name = "ums_role_resource_relation")
 public class UmsRoleResourceRelation extends TkBaseEntity {
-    private static final long serialVersionUID = -71189526042422535L;
+    private static final long serialVersionUID = 834466910959013444L;
 
     @Column(name = "id")
     @Id

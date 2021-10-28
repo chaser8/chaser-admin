@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台用户角色表(UmsRole)实体类
  *
  * @author yzb
- * @since 2021-10-25 14:51:01
+ * @since 2021-10-27 17:22:53
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_role")
 public class UmsRole extends TkBaseEntity {
-    private static final long serialVersionUID = -72440605205342666L;
+    private static final long serialVersionUID = -41164461605401680L;
 
     @Column(name = "id")
     @Id

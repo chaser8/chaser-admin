@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 后台用户和角色关系表(UmsUserRoleRelation)实体类
+ * 后台用户角色和权限关系表(UmsRoleFuncRelation)实体类
  *
  * @author yzb
  * @since 2021-10-27 17:22:53
@@ -20,9 +20,9 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@Table(name = "ums_user_role_relation")
-public class UmsUserRoleRelation extends TkBaseEntity {
-    private static final long serialVersionUID = -92588940282441415L;
+@Table(name = "ums_role_func_relation")
+public class UmsRoleFuncRelation extends TkBaseEntity {
+    private static final long serialVersionUID = 732380604552990537L;
 
     @Column(name = "id")
     @Id
@@ -32,8 +32,8 @@ public class UmsUserRoleRelation extends TkBaseEntity {
 
     @Column(name = "role_id")
     private Long roleId;
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "func_id")
+    private Long funcId;
     /**
      * 创建时间
      */
@@ -41,4 +41,8 @@ public class UmsUserRoleRelation extends TkBaseEntity {
     private Date createTime;
     @Column(name = "create_user")
     private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }

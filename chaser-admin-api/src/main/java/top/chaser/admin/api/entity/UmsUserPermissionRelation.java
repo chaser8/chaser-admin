@@ -13,7 +13,7 @@ import javax.persistence.*;
  * 后台用户和权限关系表(除角色中定义的权限以外的加减权限)(UmsUserPermissionRelation)实体类
  *
  * @author yzb
- * @since 2021-10-25 10:14:54
+ * @since 2021-10-26 10:56:12
  */
 @Accessors(chain = true)
 @Getter
@@ -21,7 +21,7 @@ import javax.persistence.*;
 @ToString
 @Table(name = "ums_user_permission_relation")
 public class UmsUserPermissionRelation extends TkBaseEntity {
-    private static final long serialVersionUID = 891095731850781725L;
+    private static final long serialVersionUID = -73203263364303992L;
 
     @Column(name = "id")
     @Id

@@ -43,14 +43,13 @@
           {{ scope.row.createTime }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="240" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="400" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-button
               v-if="row.edit"
               class="cancel-btn"
               size="mini"
-              icon="el-icon-refresh"
               type="warning"
               @click="cancelEdit(row)"
             >
@@ -59,7 +58,6 @@
             <el-button
               type="success"
               size="mini"
-              icon="el-icon-circle-check-outline"
               @click="confirmEdit(row)"
             >
               确认
@@ -68,6 +66,12 @@
           <el-button v-else type="primary" size="mini" @click="edit(row)">
             编辑
           </el-button>
+          <el-button type="primary" size="mini" @click="editMenu(row)">
+            配置菜单
+          </el-button>
+          <el-button type="primary" size="mini" @click="editMenu(row)">
+            配置权限
+          </el-button>
           <el-button size="mini" type="danger" @click="del(row)">
             删除
           </el-button>
@@ -75,19 +79,23 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="fetchData" />
+    <edit-menu :role-id.sync="currentRoleId" :show.sync="editMenuShow" />
   </div>
 </template>
 
 <script>
 import {del, getRolePage, merge} from '@/api/role'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
+import EditMenu from '@/views/role/edit-menu' // secondary package based on el-pagination
 export default {
-  components: { Pagination },
+  components: { EditMenu, Pagination },
   data() {
     return {
       list: [],
       listLoading: true,
       total: 0,
+      currentRoleId: undefined,
+      editMenuShow: false,
       listQuery: {
         pageNum: 1,
         pageSize: 10,
@@ -128,9 +136,11 @@ export default {
       })
     },
     edit(row) {
-      console.dir(this.list)
-      console.dir(row)
       row.edit = true
+    },
+    editMenu(row) {
+      this.currentRoleId = row.id
+      this.editMenuShow = true
     },
     del(row) {
       this.$confirm('此操作将删除该角色, 是否继续?', '提示', {

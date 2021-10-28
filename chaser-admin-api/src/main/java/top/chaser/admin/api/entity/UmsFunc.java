@@ -11,29 +11,34 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 后台用户和角色关系表(UmsUserRoleRelation)实体类
+ * 后台用户权限表(UmsFunc)实体类
  *
  * @author yzb
- * @since 2021-10-27 17:22:53
+ * @since 2021-10-27 17:22:52
  */
 @Accessors(chain = true)
 @Getter
 @Setter
 @ToString
-@Table(name = "ums_user_role_relation")
-public class UmsUserRoleRelation extends TkBaseEntity {
-    private static final long serialVersionUID = -92588940282441415L;
+@Table(name = "ums_func")
+public class UmsFunc extends TkBaseEntity {
+    private static final long serialVersionUID = -81218529083239972L;
 
     @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "role_id")
-    private Long roleId;
-    @Column(name = "user_id")
-    private Long userId;
+    /**
+     * 名称
+     */
+    @Column(name = "name")
+    private String name;
+    /**
+     * 功能点编码
+     */
+    @Column(name = "code")
+    private String code;
     /**
      * 创建时间
      */
@@ -41,4 +46,8 @@ public class UmsUserRoleRelation extends TkBaseEntity {
     private Date createTime;
     @Column(name = "create_user")
     private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }
