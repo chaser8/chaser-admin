@@ -14,7 +14,7 @@ import java.util.Date;
  * 后台资源表(UmsResource)实体类
  *
  * @author yzb
- * @since 2021-10-27 17:22:53
+ * @since 2021-10-28 14:20:24
  */
 @Accessors(chain = true)
 @Getter
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Table(name = "ums_resource")
 public class UmsResource extends TkBaseEntity {
-    private static final long serialVersionUID = 780612043191119533L;
+    private static final long serialVersionUID = -21125761821539543L;
 
     @Column(name = "id")
     @Id
@@ -55,4 +55,12 @@ public class UmsResource extends TkBaseEntity {
      */
     @Column(name = "category_id")
     private Long categoryId;
+    @Column(name = "method")
+    private String method;
+    @Column(name = "create_user")
+    private Long createUser;
+    @Column(name = "update_user")
+    private Long updateUser;
+    @Column(name = "update_date")
+    private Date updateDate;
 }

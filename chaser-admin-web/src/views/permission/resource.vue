@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.value" placeholder="请输入角色名称迷糊查询" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.value" placeholder="请输入服务名称模糊查询" style="width: 200px;" class="filter-item" />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -16,13 +16,14 @@
       border
       fit
       highlight-current-row
+      tooltip-effect="light"
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="序号" width="50">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="角色名">
+      <el-table-column label="服务名" prop="name" >
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input v-model="row.name" class="edit-input" size="small" />
@@ -30,20 +31,38 @@
           <span v-else>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述">
+      <el-table-column label="服务地址" show-overflow-tooltip width="300" prop="url">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-input v-model="row.description" class="edit-input" size="small" />
+            <el-input v-model="row.url" class="edit-input" size="small" />
+          </template>
+          <span v-else>{{ row.url }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="服务方法" width="110" prop="method">
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-select v-model="row.method" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
+          <span v-else>{{ row.method }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="描述" show-overflow-tooltip prop="description">
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-input v-model="row.description" type="textarea" :rows="2" class="edit-input" size="small" />
           </template>
           <span v-else>{{ row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="160" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.createTime }}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="400" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-button
@@ -67,12 +86,6 @@
             <el-button type="primary" size="mini" @click="edit(row)">
               编辑
             </el-button>
-            <el-button type="primary" size="mini" @click="editMenu(row)">
-              配置权限
-            </el-button>
-<!--            <el-button type="primary" size="mini" @click="editMenu(row)">
-              配置权限
-            </el-button>-->
             <el-button size="mini" type="danger" @click="del(row)">
               删除
             </el-button>
@@ -81,22 +94,38 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="fetchData" />
-    <edit-menu :role-id.sync="currentRoleId" :show.sync="editMenuShow" />
   </div>
 </template>
 
 <script>
-import {del, getRolePage, merge} from '@/api/role'
+import {deleteResource, merge, page} from '@/api/resource'
 import Pagination from '@/components/Pagination'
-import EditMenu from '@/views/role/edit-menu' // secondary package based on el-pagination
+
 export default {
-  components: { EditMenu, Pagination },
+
+  name: 'Resource',
+  components: { Pagination },
   data() {
     return {
+      options: [{
+        value: 'POST',
+        label: 'POST'
+      }, {
+        value: 'GET',
+        label: 'GET'
+      }, {
+        value: 'DELETE',
+        label: 'DELETE'
+      }, {
+        value: 'PUT',
+        label: 'PUT'
+      }, {
+        value: 'PATCH',
+        label: 'PATCH'
+      }],
       list: [],
       listLoading: true,
       total: 0,
-      currentRoleId: undefined,
       editMenuShow: false,
       listQuery: {
         pageNum: 1,
@@ -114,8 +143,10 @@ export default {
       if (row.id === undefined) {
         this.list.shift()
       } else {
-        row.name = row.originalName
-        row.description = row.originalDescription
+        row.name = row.oname
+        row.description = row.odescription
+        row.url = row.ourl
+        row.method = row.omethod
       }
     },
     handleCreate() {
@@ -140,20 +171,16 @@ export default {
     edit(row) {
       row.edit = true
     },
-    editMenu(row) {
-      this.currentRoleId = row.id
-      this.editMenuShow = true
-    },
     del(row) {
-      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该服务, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        del({ id: row.id }).then(_ => {
+        deleteResource(row.id).then(_ => {
           this.$notify({
             title: '提示',
-            message: '角色删除成功',
+            message: '服务删除成功',
             type: 'success',
             duration: 2000
           })
@@ -167,19 +194,23 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getRolePage(this.listQuery).then(response => {
-        this.list = response.data.list.map(v => {
-          this.$set(v, 'edit', false)
-          v.originalName = v.name
-          v.originalDescription = v.description
-          return v
-        })
-
+      page(this.listQuery).then(response => {
         this.total = response.data.total
         this.listLoading = false
+        this.list = response.data.list.map(v => {
+          this.$set(v, 'edit', false)
+          v.oname = v.name
+          v.odescription = v.description
+          v.ourl = v.url
+          v.omethod = v.method
+          return v
+        })
       })
     }
   }
 }
 </script>
 
+<style scoped>
+
+</style>

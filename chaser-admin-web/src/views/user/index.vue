@@ -32,7 +32,7 @@
           {{ scope.row.nickName }}
         </template>
       </el-table-column>
-      <el-table-column label="角色" width="110" align="center">
+      <el-table-column label="角色" show-overflow-tooltip width="110" align="left">
         <template slot-scope="scope">
           <span>{{ scope.row.roleName }}</span>
         </template>

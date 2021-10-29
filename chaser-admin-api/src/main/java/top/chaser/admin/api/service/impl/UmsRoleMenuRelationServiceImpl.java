@@ -1,11 +1,11 @@
 package top.chaser.admin.api.service.impl;
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.chaser.admin.api.controller.request.RoleMenusUpdateReq;
 import top.chaser.admin.api.entity.UmsRoleMenuRelation;
 import top.chaser.admin.api.service.UmsRoleMenuRelationService;
 import top.chaser.framework.common.web.session.SessionUtil;
@@ -26,16 +26,17 @@ import java.util.stream.Collectors;
 public class UmsRoleMenuRelationServiceImpl extends TkServiceImpl<UmsRoleMenuRelation> implements UmsRoleMenuRelationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateRoleMenus(RoleMenusUpdateReq roleMenusUpdateReq) {
-        this.mapper.delete(new UmsRoleMenuRelation().setRoleId(roleMenusUpdateReq.getRoleId()));
-
-        List<UmsRoleMenuRelation> roleMenuRelations = roleMenusUpdateReq.getMenus().stream().map(menuId ->
-                new UmsRoleMenuRelation()
-                        .setRoleId(roleMenusUpdateReq.getRoleId())
-                        .setMenuId(menuId)
-                        .setCreateTime(new Date())
-                        .setCreateUser(Convert.toLong(SessionUtil.getCurrentUser().getUserId()))
-        ).collect(Collectors.toList());
-        this.mapper.insertListSelective(roleMenuRelations);
+    public void updateRoleMenus(Long roleId, List<Long> menuIds) {
+        this.mapper.delete(new UmsRoleMenuRelation().setRoleId(roleId));
+        if (!CollUtil.isEmpty(menuIds)) {
+            List<UmsRoleMenuRelation> roleMenuRelations = menuIds.stream().map(menuId ->
+                    new UmsRoleMenuRelation()
+                            .setRoleId(roleId)
+                            .setMenuId(menuId)
+                            .setCreateTime(new Date())
+                            .setCreateUser(Convert.toLong(SessionUtil.getCurrentUser().getUserId()))
+            ).collect(Collectors.toList());
+            this.mapper.insertListSelective(roleMenuRelations);
+        }
     }
 }

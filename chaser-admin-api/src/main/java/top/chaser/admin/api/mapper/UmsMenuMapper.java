@@ -1,9 +1,12 @@
 package top.chaser.admin.api.mapper;
 
 
-import top.chaser.framework.starter.tkmybatis.mapper.TkBaseMapper;
-import top.chaser.admin.api.entity.UmsMenu;
 import org.apache.ibatis.annotations.Mapper;
+import top.chaser.admin.api.controller.response.LevelMenuGetRes;
+import top.chaser.admin.api.entity.UmsMenu;
+import top.chaser.framework.starter.tkmybatis.mapper.TkBaseMapper;
+
+import java.util.List;
 
 
 /**
@@ -13,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UmsMenuMapper extends TkBaseMapper<UmsMenu> {
 
+    List<LevelMenuGetRes> selectMenuFuncs(Long menuId);
 }

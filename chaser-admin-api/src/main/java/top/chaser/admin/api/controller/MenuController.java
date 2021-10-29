@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.chaser.admin.api.controller.request.MenuPutReq;
+import top.chaser.admin.api.controller.response.LevelMenuGetRes;
 import top.chaser.admin.api.controller.response.MenuFuncGetRes;
 import top.chaser.admin.api.controller.response.MenuRes;
 import top.chaser.admin.api.entity.UmsMenu;
@@ -38,7 +39,7 @@ public class MenuController extends BaseController {
     private UmsMenuFuncRelationService menuFuncRelationService;
 
     @RestPostMapping("getLevelMenus")
-    public R<List<MenuRes>> getLevelMenus() {
+    public R<List<LevelMenuGetRes>> getLevelMenus() {
         return R.success(menuService.allLevelMenu());
     }
 

@@ -1,6 +1,7 @@
 package top.chaser.admin.api.service;
 
 import com.github.pagehelper.PageInfo;
+import top.chaser.admin.api.controller.request.RoleMenusUpdateReq;
 import top.chaser.admin.api.controller.request.RolePageReq;
 import top.chaser.admin.api.controller.response.RolePageRes;
 import top.chaser.admin.api.entity.UmsRole;
@@ -14,5 +15,7 @@ import top.chaser.framework.starter.tkmybatis.service.IService;
  */
 public interface UmsRoleService extends IService<UmsRole> {
     PageInfo<RolePageRes> getRolePage(RolePageReq rolePageReq);
+
+    void updatePermission(RoleMenusUpdateReq roleMenusUpdateReq);
 }
 

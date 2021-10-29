@@ -36,9 +36,9 @@ export function getRoleMenus(data) {
     data
   })
 }
-export function updateRoleMenus(data) {
+export function updatePermission(data) {
   return request({
-    url: '/vue-admin-template/role/updateRoleMenus',
+    url: '/vue-admin-template/role/updatePermission',
     method: 'post',
     data
   })

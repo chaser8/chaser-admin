@@ -41,7 +41,7 @@
               <span v-else>{{ row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="菜单编码" prop="code">
+          <el-table-column align="center" label="菜单编码" show-overflow-tooltip prop="code">
             <template slot-scope="{row}">
               <template v-if="row.edit">
                 <el-input v-model="row.code" class="edit-input" size="small" />
@@ -49,7 +49,7 @@
               <span v-else>{{ row.code }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="排序" width="80" prop="sort">
+          <el-table-column align="center" label="排序" width="50" prop="sort">
             <template slot-scope="{row}">
               <template v-if="row.edit">
                 <el-input v-model="row.sort" class="edit-input" size="small" />
@@ -65,7 +65,7 @@
               <span v-else>{{ row.icon }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="菜单地址" prop="url">
+          <el-table-column align="center" label="菜单地址" show-overflow-tooltip prop="url">
             <template slot-scope="{row}">
               <template v-if="row.edit">
                 <el-input v-model="row.url" class="edit-input" size="small" />
@@ -164,10 +164,11 @@ export default {
     },
     handleCreate() {
       if (this.tableMenuFlag) {
+        const level = this.currentMenu.level + 1
         this.list.unshift({
           parentId: this.currentMenu.id,
           name: '',
-          level: this.currentMenu.level + 1,
+          level: level,
           sort: undefined,
           code: '',
           icon: '',

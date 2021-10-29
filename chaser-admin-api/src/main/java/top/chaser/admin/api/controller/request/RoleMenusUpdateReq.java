@@ -14,5 +14,7 @@ public class RoleMenusUpdateReq {
     @NotNull
     private Long roleId;
     @NotNull
-    private List<Long> menus;
+    private List<Long> menuIds;
+
+    private List<Long> funcIds;
 }

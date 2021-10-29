@@ -1,14 +1,17 @@
 package top.chaser.admin.api.service.impl;
 
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
+import top.chaser.admin.api.controller.response.LevelMenuGetRes;
 import top.chaser.admin.api.controller.response.MenuRes;
 import top.chaser.admin.api.entity.UmsMenu;
 import top.chaser.admin.api.entity.UmsMenuFuncRelation;
 import top.chaser.admin.api.entity.UmsRole;
+import top.chaser.admin.api.mapper.UmsMenuMapper;
 import top.chaser.admin.api.service.UmsMenuFuncRelationService;
 import top.chaser.admin.api.service.UmsMenuService;
 import top.chaser.framework.common.base.util.BeanUtil;
@@ -32,25 +35,39 @@ public class UmsMenuServiceImpl extends TkServiceImpl<UmsMenu> implements UmsMen
     private UmsMenuFuncRelationService menuFuncRelationService;
 
     @Override
-    public List<MenuRes> allLevelMenu() {
+    public List<LevelMenuGetRes> allLevelMenu() {
         List<UmsMenu> umsMenus = mapper.selectByExample(Example.builder(UmsRole.class).orderBy("sort").build());
-        List<MenuRes> levelMenus = new ArrayList<>();
+        List<LevelMenuGetRes> levelMenus = new ArrayList<>();
         for (UmsMenu umsMenu : umsMenus) {
             if (umsMenu.getLevel().intValue() == 1 && umsMenu.getParentId().longValue() == 0L) {
-                levelMenus.add(BeanUtil.toBean(umsMenu, MenuRes.class));
+                LevelMenuGetRes levelMenuGetRes = BeanUtil.toBean(umsMenu, LevelMenuGetRes.class);
+                levelMenuGetRes.setType("menu");
+                levelMenus.add(levelMenuGetRes);
             }
         }
-        for (MenuRes levelMenu : levelMenus) {
-            List<MenuRes> children = new ArrayList<>();
+        for (LevelMenuGetRes levelMenu : levelMenus) {
+            List<LevelMenuGetRes> children = new ArrayList<>();
             for (UmsMenu umsMenu : umsMenus) {
                 if (levelMenu.getId().longValue() == umsMenu.getParentId().longValue()) {
-                    children.add(BeanUtil.toBean(umsMenu, MenuRes.class));
+                    LevelMenuGetRes levelMenuGetRes = BeanUtil.toBean(umsMenu, LevelMenuGetRes.class);
+                    levelMenuGetRes.setType("menu");
+                    levelMenuGetRes.setChildren(getFunc(umsMenu.getId()));
+                    children.add(levelMenuGetRes);
                 }
             }
+            if (CollUtil.isEmpty(children)) {
+                children = getFunc(levelMenu.getId());
+            }
             levelMenu.setChildren(children);
+
         }
         return levelMenus;
     }
+
+    public List<LevelMenuGetRes> getFunc(Long menuId) {
+        return ((UmsMenuMapper) mapper).selectMenuFuncs(menuId).stream().map(levelMenuGetRes -> levelMenuGetRes.setType("func")).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<MenuRes> getChildren(Long menuId) {
