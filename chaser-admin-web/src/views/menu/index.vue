@@ -1,6 +1,6 @@
 <template>
-  <el-container class="el-container">
-    <el-aside width="300px" style="background: none;">
+  <el-container class="app-container">
+    <el-aside width="250px" style="background: none;">
       <el-tree
         ref="menuTree"
         :data="menuData"
@@ -49,7 +49,7 @@
               <span v-else>{{ row.code }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="排序" width="50" prop="sort">
+          <el-table-column align="center" label="排序" width="80" prop="sort">
             <template slot-scope="{row}">
               <template v-if="row.edit">
                 <el-input v-model="row.sort" class="edit-input" size="small" />
@@ -57,7 +57,7 @@
               <span v-else>{{ row.sort }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="图标" prop="icon">
+          <el-table-column align="center" label="图标" width="80" prop="icon">
             <template slot-scope="{row}">
               <template v-if="row.edit">
                 <el-input v-model="row.icon" class="edit-input" size="small" />
@@ -120,7 +120,7 @@
 <script>
 import {addMenu, delMenu, getChildren, getLevelMenus, getMenuFunc} from '@/api/menu'
 import {addFunc, delFunc} from '@/api/func'
-import FuncResourceRel from '@/views/permission/func-resource-rel'
+import FuncResourceRel from '@/views/menu/func-resource-rel'
 
 export default {
   name: 'MenuManage',
@@ -163,6 +163,15 @@ export default {
       })
     },
     handleCreate() {
+      if (this.list.length !== 0 && this.list[0].id === undefined) {
+        this.$notify({
+          title: '提示',
+          message: '请先提交后再新增',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      }
       if (this.tableMenuFlag) {
         const level = this.currentMenu.level + 1
         this.list.unshift({

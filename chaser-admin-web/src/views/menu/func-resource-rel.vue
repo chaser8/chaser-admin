@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="关联服务" :before-close="close" @open="open">
+  <el-dialog class="dialog-resource" :visible.sync="show" title="关联服务" :before-close="close" @open="open" width="850px">
     <el-transfer
       v-model="value"
       :data="funcList"
@@ -8,6 +8,7 @@
       :filter-method="filterMethod"
       :props="transferProps"
       filter-placeholder="请输入服务名关键字"
+      style="width: 100%"
     />
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="updateFuncResourceRel()">
@@ -73,5 +74,7 @@ export default {
 </script>
 
 <style scoped>
-
+.dialog-resource >>> .el-transfer-panel{
+  width: 300px;
+}
 </style>

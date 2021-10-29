@@ -70,7 +70,7 @@
             <el-button type="primary" size="mini" @click="editMenu(row)">
               配置权限
             </el-button>
-<!--            <el-button type="primary" size="mini" @click="editMenu(row)">
+            <!--            <el-button type="primary" size="mini" @click="editMenu(row)">
               配置权限
             </el-button>-->
             <el-button size="mini" type="danger" @click="del(row)">
@@ -119,6 +119,15 @@ export default {
       }
     },
     handleCreate() {
+      if (this.list.length !== 0 && this.list[0].id === undefined) {
+        this.$notify({
+          title: '提示',
+          message: '请先提交后再新增',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      }
       this.list.unshift({
         name: '',
         description: '',

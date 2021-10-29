@@ -14,6 +14,8 @@ import java.util.List;
  * @since 2021-10-18 09:40:24
  */
 public interface UmsMenuService extends IService<UmsMenu> {
+    List<LevelMenuGetRes> allLevelMenuFuncs();
+
     List<LevelMenuGetRes> allLevelMenu();
 
     List<MenuRes> getChildren(Long menuId);

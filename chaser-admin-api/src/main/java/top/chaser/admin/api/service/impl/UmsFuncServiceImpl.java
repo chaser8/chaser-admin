@@ -47,7 +47,10 @@ public class UmsFuncServiceImpl extends TkServiceImpl<UmsFunc> implements UmsFun
         if (func.getId() == null) {
             func.setCreateUser(userId);
             this.mapper.insertSelective(func);
-            menuFuncRelationService.insertSelective(new UmsMenuFuncRelation().setFuncId(func.getId()).setMenuId(funcPutReq.getParentId()));
+            menuFuncRelationService.insertSelective(new UmsMenuFuncRelation()
+                    .setFuncId(func.getId())
+                    .setMenuId(funcPutReq.getParentId())
+                    .setCreateUser(userId));
         } else {
             func.setUpdateUser(userId);
             func.setUpdateDate(new Date());

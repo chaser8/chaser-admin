@@ -15,6 +15,16 @@ export function getLevelMenus() {
     data
   })
 }
+
+export function getLevelMenuFuncs() {
+  const data = {}
+  return request({
+    url: '/vue-admin-template/menu/getLevelMenuFuncs',
+    method: 'post',
+    data
+  })
+}
+
 export function getChildren(id) {
   return request({
     url: '/vue-admin-template/menu/getChildren/' + id,

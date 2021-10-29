@@ -7,7 +7,7 @@
       node-key="key"
       :props="defaultProps"
       default-expand-all
-      style="min-height: 200px"
+      style="min-height: 200px;"
       check-on-click-node
       :expand-on-click-node="false"
     >
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {getLevelMenus} from '@/api/menu'
+import {getLevelMenuFuncs} from '@/api/menu'
 import {getRoleMenus, updatePermission} from '@/api/role'
 
 export default {
@@ -56,7 +56,7 @@ export default {
   },
   created() {
     this.treeData = []
-    getLevelMenus().then(response => {
+    getLevelMenuFuncs().then(response => {
       this.treeData = response.data
     })
   },

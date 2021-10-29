@@ -42,6 +42,10 @@ public class MenuController extends BaseController {
     public R<List<LevelMenuGetRes>> getLevelMenus() {
         return R.success(menuService.allLevelMenu());
     }
+    @RestPostMapping("getLevelMenuFuncs")
+    public R<List<LevelMenuGetRes>> getLevelMenuFuncs() {
+        return R.success(menuService.allLevelMenuFuncs());
+    }
 
     @RestGetMapping("getChildren/{menuId}")
     public R<List<MenuRes>> getChildren(@PathVariable("menuId") Long menuId) {

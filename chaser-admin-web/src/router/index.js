@@ -71,10 +71,16 @@ export const constantRoutes = [
         meta: { title: '角色管理', icon: 'table' }
       },
       {
-        path: 'permission',
-        name: '权限管理',
-        component: () => import('@/views/permission/index'),
-        meta: { title: '权限管理', icon: 'table' }
+        path: 'menu',
+        name: '菜单权限管理',
+        component: () => import('@/views/menu/index'),
+        meta: { title: '菜单权限管理', icon: 'table' }
+      },
+      {
+        path: 'resource',
+        name: '服务管理',
+        component: () => import('@/views/resource/index'),
+        meta: { title: '服务管理', icon: 'table' }
       }
     ]
   },

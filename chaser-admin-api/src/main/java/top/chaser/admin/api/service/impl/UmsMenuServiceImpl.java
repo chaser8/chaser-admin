@@ -30,12 +30,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("umsMenuService")
+@SuppressWarnings("all")
 public class UmsMenuServiceImpl extends TkServiceImpl<UmsMenu> implements UmsMenuService {
     @Resource
     private UmsMenuFuncRelationService menuFuncRelationService;
 
     @Override
-    public List<LevelMenuGetRes> allLevelMenu() {
+    public List<LevelMenuGetRes> allLevelMenuFuncs() {
         List<UmsMenu> umsMenus = mapper.selectByExample(Example.builder(UmsRole.class).orderBy("sort").build());
         List<LevelMenuGetRes> levelMenus = new ArrayList<>();
         for (UmsMenu umsMenu : umsMenus) {
@@ -64,19 +65,44 @@ public class UmsMenuServiceImpl extends TkServiceImpl<UmsMenu> implements UmsMen
         return levelMenus;
     }
 
+    @Override
+    public List<LevelMenuGetRes> allLevelMenu() {
+        List<UmsMenu> umsMenus = mapper.selectByExample(Example.builder(UmsRole.class).orderBy("sort").build());
+        List<LevelMenuGetRes> levelMenus = new ArrayList<>();
+        for (UmsMenu umsMenu : umsMenus) {
+            if (umsMenu.getLevel().intValue() == 1 && umsMenu.getParentId().longValue() == 0L) {
+                LevelMenuGetRes levelMenuGetRes = BeanUtil.toBean(umsMenu, LevelMenuGetRes.class);
+                levelMenuGetRes.setType("menu");
+                levelMenus.add(levelMenuGetRes);
+            }
+        }
+        for (LevelMenuGetRes levelMenu : levelMenus) {
+            List<LevelMenuGetRes> children = new ArrayList<>();
+            for (UmsMenu umsMenu : umsMenus) {
+                if (levelMenu.getId().longValue() == umsMenu.getParentId().longValue()) {
+                    LevelMenuGetRes levelMenuGetRes = BeanUtil.toBean(umsMenu, LevelMenuGetRes.class);
+                    levelMenuGetRes.setType("menu");
+                    children.add(levelMenuGetRes);
+                }
+            }
+            levelMenu.setChildren(children);
+        }
+        return levelMenus;
+    }
+
     public List<LevelMenuGetRes> getFunc(Long menuId) {
         return ((UmsMenuMapper) mapper).selectMenuFuncs(menuId).stream().map(levelMenuGetRes -> levelMenuGetRes.setType("func")).collect(Collectors.toList());
     }
 
-
     @Override
     public List<MenuRes> getChildren(Long menuId) {
-        return mapper.selectByExample(Example.builder(UmsMenu.class)
+        List<MenuRes> menuRes = mapper.selectByExample(Example.builder(UmsMenu.class)
                         .where(Sqls.custom().andEqualTo("parentId", menuId)).orderBy("sort")
                         .build())
                 .stream()
                 .map(umsMenu -> BeanUtil.toBean(umsMenu, MenuRes.class))
                 .collect(Collectors.toList());
+        return menuRes;
     }
 
     @Override

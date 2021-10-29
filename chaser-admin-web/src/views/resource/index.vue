@@ -23,7 +23,7 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="服务名" prop="name" >
+      <el-table-column label="服务名" prop="name">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input v-model="row.name" class="edit-input" size="small" />
@@ -47,8 +47,8 @@
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
-              </el-option>
+                :value="item.value"
+              />
             </el-select>
           </template>
           <span v-else>{{ row.method }}</span>
@@ -150,6 +150,15 @@ export default {
       }
     },
     handleCreate() {
+      if (this.list.length !== 0 && this.list[0].id === undefined) {
+        this.$notify({
+          title: '提示',
+          message: '请先提交后再新增',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      }
       this.list.unshift({
         name: '',
         description: '',
