@@ -9,27 +9,82 @@
     </update>
     <update id="lock">
         update ums_user
-        set status_cd = '2000'
+        set status = '2000'
         where username = #{userCode}
           and pwd_error_cnt >= #{maxPasswordErrorTimes}
           and status != '2000'
     </update>
     <select id="queryUser" resultType="top.chaser.admin.api.controller.response.UserPageRes">
-        select
-        a.user_id,a.user_phone,a.username,a.icon,a.email,a.nick_name,a.note,a.create_time,a.login_time,a.status,
-        if(a.status='1000','有效','已冻结') statusName,
-        a.pwd_error_cnt,
-        (select group_concat(r.name separator ',') from ums_user_role_relation ur,ums_role r
-        where a.user_id = ur.user_id and r.id = ur.role_id and r.status='1000'
-        group by ur.user_id) role_name
+        select a.user_id,
+               a.user_phone,
+               a.username,
+               a.icon,
+               a.email,
+               a.nick_name,
+               a.note,
+               a.create_time,
+               a.login_time,
+               a.status,
+               if(a.status = '1000', '有效', '已冻结') statusName,
+               a.pwd_error_cnt,
+               (select group_concat(r.name separator ',')
+                from ums_user_role_relation ur,
+                     ums_role r
+                where a.user_id = ur.user_id
+                  and r.id = ur.role_id
+                  and r.status = '1000'
+                group by ur.user_id)              role_name
         from ums_user a
-        where 1=1
-        <if test="value!=null and value!=''">
-            and CONCAT(a.nick_name,a.user_phone,a.username) like CONCAT('%',#{value},'%')
+                where 1 = 1
+        <if test="value != null and value != ''">
+            and CONCAT(a.nick_name, a.user_phone, a.username) like CONCAT('%', #{value}, '%')
         </if>
-        <if test="status!=null and status!=''">
+        <if test="status != null and status != ''">
             and a.status = #{status}
         </if>
+    </select>
+
+    <select id="selectUserRoles" resultType="top.chaser.framework.common.web.session.Role">
+        select b.id, b.name, b.id code
+        from ums_user_role_relation a,
+             ums_role b
+        where a.role_id = b.id
+          and b.status = '1000'
+          and a.user_id = #{userId}
+    </select>
+
+    <select id="getUserMenus" resultType="top.chaser.framework.common.web.session.Menu">
+        select b.id, b.name, b.level, b.sort 'index', b.path uri, b.parent_id, b.id code
+        from ums_role_menu_relation a,
+             ums_menu b
+                where a.menu_id = b.id
+                  and a.role_id in
+        <foreach collection="roles" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+        order by b.sort
+    </select>
+
+    <select id="getUserFuncs" resultType="top.chaser.framework.common.web.session.Function">
+        select b.id, b.name, b.code code, a.menu_id
+        from ums_menu_func_relation a,
+             ums_func b
+                where a.func_id = b.id
+                  and a.menu_id in
+        <foreach collection="menus" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <select id="getUserFuncResources" resultType="top.chaser.framework.common.web.session.ApiResource">
+        select b.id, b.name, b.url uri, b.method, b.id code
+        from ums_func_resource_relation a,
+             ums_resource b
+                where a.resource_id = b.id
+                  and a.func_id in
+        <foreach collection="functions" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
     </select>
 </mapper>
 

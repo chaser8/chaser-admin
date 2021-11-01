@@ -20,9 +20,10 @@ import java.io.Serializable;
 import java.util.*;
 
 @Service
-public class UserDetailsServiceImpl  extends UaaUserDetailsService {
+public class UserDetailsServiceImpl extends UaaUserDetailsService {
     @Autowired
     UmsUserService userService;
+
     @Override
     public UserDetails loadUserByPhone(String phone) {
         Optional<List<UmsUser>> users = Optional.ofNullable(this.userService.select(new UmsUser().setUserPhone(phone).setStatus(Status.COMMON_EFFECTIVE)));
@@ -40,7 +41,8 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
 
     @Override
     public Set<Role> getUserRoles(Serializable userId) {
-        return super.getUserRoles(userId);
+        Set<Role> roles = userService.selectUserRoles(Convert.toLong(userId));
+        return roles;
     }
 
     @Override
@@ -50,14 +52,14 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
 
     @Override
     public Set<Privilege> getUserPrivileges(Set<Role> roles, Serializable userId) {
-        return super.getUserPrivileges(roles, userId);
+        return userService.getUserPrivileges(roles, Convert.toLong(userId));
     }
 
     @Override
     public void incrementPasswordErrorTimesAndLock(String username) {
         int maxPasswordErrorTimes = serverProperties.getMaxPasswordErrorTimes();
         userService.incrementPasswordErrorTimes(username);
-        if(maxPasswordErrorTimes>0){
+        if (maxPasswordErrorTimes > 0) {
             lock(username);
         }
     }
@@ -71,9 +73,9 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
     public void clearPasswordErrorTimes(String username) {
         Example example = new Example(UmsUser.class);
         example.createCriteria()
-                .orNotEqualTo("pwdErrorCnt",0)
-                .andEqualTo("username",username);
-        userService.updateByExampleSelective(new UmsUser().setPwdErrorCnt(0),example);
+                .orNotEqualTo("pwdErrorCnt", 0)
+                .andEqualTo("username", username);
+        userService.updateByExampleSelective(new UmsUser().setPwdErrorCnt(0), example);
     }
 
     @Override
@@ -98,9 +100,9 @@ public class UserDetailsServiceImpl  extends UaaUserDetailsService {
 
         if (Status.COMMON_EFFECTIVE.equals(sysUser.getStatus())) {
             user.setStatus(User.Status.NORMAL);
-        }else if("3000".equals(sysUser.getStatus())){
+        } else if ("3000".equals(sysUser.getStatus())) {
             user.setStatus(User.Status.LOCKED);
-        }else {
+        } else {
             user.setStatus(User.Status.UNKNOWN);
         }
         user.setNickname(Convert.toStr(sysUser.getNickName()));
