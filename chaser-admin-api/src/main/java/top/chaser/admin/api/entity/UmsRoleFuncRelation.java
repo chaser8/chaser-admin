@@ -41,8 +41,4 @@ public class UmsRoleFuncRelation extends TkBaseEntity {
     private Date createTime;
     @Column(name = "create_user")
     private Long createUser;
-    @Column(name = "update_user")
-    private Long updateUser;
-    @Column(name = "update_date")
-    private Date updateDate;
 }

@@ -5,7 +5,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button v-permission="['system:resource:add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新增
       </el-button>
     </div>
@@ -83,10 +83,10 @@
             </el-button>
           </template>
           <template v-else>
-            <el-button type="primary" size="mini" @click="edit(row)">
+            <el-button v-permission="['system:resource:update']" type="primary" size="mini" @click="edit(row)">
               编辑
             </el-button>
-            <el-button size="mini" type="danger" @click="del(row)">
+            <el-button v-permission="['system:resource:delete']" size="mini" type="danger" @click="del(row)">
               删除
             </el-button>
           </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="dialog-resource" :visible.sync="show" title="关联服务" :before-close="close" @open="open" width="850px">
+  <el-dialog class="dialog-resource" :visible.sync="show" title="关联服务" :before-close="close" width="850px" @open="open">
     <el-transfer
       v-model="value"
       :data="funcList"
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import {getAll} from '@/api/resource'
-import {getResources, updateResources} from '@/api/func'
+import { getAll } from '@/api/resource'
+import { getResources, updateResources } from '@/api/func'
 
 export default {
   name: 'FuncResourceRel',

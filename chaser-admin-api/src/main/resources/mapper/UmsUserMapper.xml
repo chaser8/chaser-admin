@@ -54,7 +54,7 @@
     </select>
 
     <select id="getUserMenus" resultType="top.chaser.framework.common.web.session.Menu">
-        select b.id, b.name, b.level, b.sort 'index', b.path uri, b.parent_id, b.id code
+        select b.id, b.name, b.level, b.sort 'index', b.path uri, b.parent_id, b.code code
         from ums_role_menu_relation a,
              ums_menu b
                 where a.menu_id = b.id
@@ -66,12 +66,12 @@
     </select>
 
     <select id="getUserFuncs" resultType="top.chaser.framework.common.web.session.Function">
-        select b.id, b.name, b.code code, a.menu_id
-        from ums_menu_func_relation a,
+        select b.id, b.name, b.code code
+        from ums_role_func_relation a,
              ums_func b
                 where a.func_id = b.id
-                  and a.menu_id in
-        <foreach collection="menus" item="item" separator="," open="(" close=")">
+                  and a.role_id in
+        <foreach collection="roles" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </select>

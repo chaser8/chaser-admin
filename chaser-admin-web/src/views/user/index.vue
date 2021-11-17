@@ -5,7 +5,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button v-permission="['system:user:add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新增
       </el-button>
     </div>
@@ -59,16 +59,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="240" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button v-permission="['system:user:update']" type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="success" @click="editRole(row)">
+          <el-button v-permission="['system:user:role']" size="mini" type="success" @click="editRole(row)">
             编辑角色
           </el-button>
-          <el-button v-if="row.status=='1000'" size="mini" type="danger" @click="freeze(row)">
+          <el-button v-permission="['system:user:freeze']" v-if="row.status=='1000'" size="mini" type="danger" @click="freeze(row)">
             冻结
           </el-button>
-          <el-button v-else size="mini" type="danger" @click="unfreeze(row)">
+          <el-button v-permission="['system:user:unfreeze']" v-else size="mini" type="danger" @click="unfreeze(row)">
             解冻
           </el-button>
         </template>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {freeze, page, unfreeze} from '@/api/user'
+import { freeze, page, unfreeze } from '@/api/user'
 import Pagination from '@/components/Pagination'
 import EditUser from '@/views/user/edit-user'
 import EditUserRole from '@/views/user/edit-user-role' // secondary package based on el-pagination

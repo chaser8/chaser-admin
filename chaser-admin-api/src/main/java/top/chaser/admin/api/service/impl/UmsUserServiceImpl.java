@@ -108,8 +108,8 @@ public class UmsUserServiceImpl extends TkServiceImpl<UmsUser> implements UmsUse
         return ((UmsUserMapper) mapper).getUserMenus(roles);
     }
 
-    public Set<Function> getUserFuncs(Set<Menu> menus) {
-        return ((UmsUserMapper) mapper).getUserFuncs(menus);
+    public Set<Function> getUserFuncs(Set<Role> roles) {
+        return ((UmsUserMapper) mapper).getUserFuncs(roles);
     }
 
     public Set<ApiResource> getUserFuncResources(Set<Function> functions) {
@@ -123,13 +123,16 @@ public class UmsUserServiceImpl extends TkServiceImpl<UmsUser> implements UmsUse
         //用户菜单权限
         Set<Menu> userMenus = getUserMenus(roles, userId);
         privileges.addAll(userMenus);
-        //功能项
-        Set<Function> userFuncs = getUserFuncs(userMenus);
-        privileges.addAll(userFuncs);
-        //服务
-        Set<ApiResource> apiResources = getUserFuncResources(userFuncs);
-        privileges.addAll(apiResources);
-
+        if(userMenus.size()>0){
+            //功能项
+            Set<Function> userFuncs = getUserFuncs(roles);
+            privileges.addAll(userFuncs);
+            if(userFuncs.size()>0){
+                //服务
+                Set<ApiResource> apiResources = getUserFuncResources(userFuncs);
+                privileges.addAll(apiResources);
+            }
+        }
         return privileges;
     }
 }

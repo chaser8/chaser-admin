@@ -15,8 +15,11 @@
     </el-aside>
     <el-main>
       <div class="filter-container">
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-          新增
+        <el-button v-if="tableMenuFlag" v-permission="['system:menu:add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+          新增菜单
+        </el-button>
+        <el-button v-else v-permission="['system:func:add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+          新增功能项
         </el-button>
       </div>
       <el-table
@@ -80,34 +83,64 @@
         </template>
         <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <template v-if="row.edit">
-              <el-button
-                v-if="row.edit"
-                class="cancel-btn"
-                size="mini"
-                type="warning"
-                @click="cancelEdit(row)"
-              >
-                取消
-              </el-button>
-              <el-button
-                type="success"
-                size="mini"
-                @click="confirmEdit(row)"
-              >
-                确认
-              </el-button>
+            <template v-if="tableMenuFlag">
+              <template v-if="row.edit">
+                <el-button
+                  v-if="row.edit"
+                  class="cancel-btn"
+                  size="mini"
+                  type="warning"
+                  @click="cancelEdit(row)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="success"
+                  size="mini"
+                  @click="confirmEdit(row)"
+                >
+                  确认
+                </el-button>
+              </template>
+              <template v-else>
+                <el-button v-permission="['system:menu:update']" type="primary" size="mini" @click="edit(row)">
+                  编辑
+                </el-button>
+                <el-button v-permission="['system:menu:delete']" type="danger" size="mini" @click="del(row)">
+                  删除
+                </el-button>
+              </template>
             </template>
             <template v-else>
-              <el-button type="primary" size="mini" @click="edit(row)">
-                编辑
-              </el-button>
-              <el-button v-if="!tableMenuFlag" type="danger" size="mini" @click="relResource(row)">
-                关联服务
-              </el-button>
-              <el-button type="danger" size="mini" @click="del(row)">
-                删除
-              </el-button>
+              <template v-if="row.edit">
+                <el-button
+                  v-if="row.edit"
+                  class="cancel-btn"
+                  size="mini"
+                  type="warning"
+                  @click="cancelEdit(row)"
+                >
+                  取消
+                </el-button>
+                <el-button
+                  type="success"
+                  size="mini"
+                  @click="confirmEdit(row)"
+                >
+                  确认
+                </el-button>
+              </template>
+              <template v-else>
+                <el-button v-permission="['system:func:update']" type="primary" size="mini" @click="edit(row)">
+                  编辑
+                </el-button>
+                <el-button v-permission="['system:func:resource']" type="danger" size="mini" @click="relResource(row)">
+                  关联服务
+                </el-button>
+                <el-button v-permission="['system:func:delete']" type="danger" size="mini" @click="del(row)">
+                  删除
+                </el-button>
+              </template>
             </template>
           </template>
         </el-table-column>
@@ -118,8 +151,8 @@
 </template>
 
 <script>
-import {addMenu, delMenu, getChildren, getLevelMenus, getMenuFunc} from '@/api/menu'
-import {addFunc, delFunc} from '@/api/func'
+import { addMenu, delMenu, getChildren, getLevelMenus, getMenuFunc } from '@/api/menu'
+import { addFunc, delFunc } from '@/api/func'
 import FuncResourceRel from '@/views/menu/func-resource-rel'
 
 export default {

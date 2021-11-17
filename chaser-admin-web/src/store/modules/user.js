@@ -7,7 +7,9 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  menus: [],
+  functions: []
 }
 
 const mutations = {
@@ -25,6 +27,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_MENUS: (state, menus) => {
+    state.menus = menus
+  },
+  SET_FUNCTIONS: (state, functions) => {
+    state.functions = functions
   }
 }
 
@@ -45,7 +53,6 @@ const actions = {
       })
     })
   },
-
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -54,17 +61,28 @@ const actions = {
         if (!data) {
           reject('Verification failed, please Login again.')
         }
+        const { roles, nickname, avatar, introduction, privileges } = data
 
-        const { roles, nickname, avatar, introduction } = data
+        commit('SET_ROLES', roles)
+        commit('SET_NAME', nickname)
+        commit('SET_AVATAR', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/timg.jpg')
+        const menus = []
+        const functions = []
+        privileges.forEach(privilege => {
+          if (privilege.type === 'MENU') {
+            menus.push(privilege)
+          } else if (privilege.type === 'FUNC') {
+            functions.push(privilege.code)
+          }
+        })
+        commit('SET_MENUS', menus)
+        commit('SET_FUNCTIONS', functions)
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', nickname)
-        commit('SET_AVATAR', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/timg.jpg')
         // commit('SET_INTRODUCTION', introduction)
         resolve(data)
       }).catch(error => {
@@ -72,7 +90,6 @@ const actions = {
       })
     })
   },
-
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {

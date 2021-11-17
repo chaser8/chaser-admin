@@ -29,7 +29,7 @@ public interface UmsUserMapper extends TkBaseMapper<UmsUser> {
 
     Set<Menu> getUserMenus(@Param("roles") Set<Role> roles);
 
-    Set<Function> getUserFuncs(@Param("menus") Set<Menu> menus);
+    Set<Function> getUserFuncs(@Param("roles") Set<Role> roles);
 
     Set<ApiResource> getUserFuncResources(@Param("functions") Set<Function> functions);
 }

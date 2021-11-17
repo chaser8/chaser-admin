@@ -96,7 +96,7 @@ public class UserDetailsServiceImpl extends UaaUserDetailsService {
         user.setUserCode(sysUser.getUsername());
         user.setPassword(sysUser.getPassword());
         user.setUserTel(sysUser.getUserPhone());
-        user.setPasswordErrorTimes(sysUser.getPwdErrorCnt());
+        user.setPasswordErrorTimes(sysUser.getPwdErrorCnt() == null ? 0 : sysUser.getPwdErrorCnt());
 
         if (Status.COMMON_EFFECTIVE.equals(sysUser.getStatus())) {
             user.setStatus(User.Status.NORMAL);

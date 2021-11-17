@@ -31,17 +31,6 @@ Vue.use(Router)
  */
 export const constantRoutes = [
   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: '首页',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
-  },
-  {
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -66,52 +55,67 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 export const asyncRoutes = [
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    meta: { code: 'dashboard' },
+    children: [{
+      path: 'dashboard',
+      name: '首页',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: '首页', icon: 'dashboard', code: 'dashboard' }
+    }]
+  },
   {
     path: '/system',
     component: Layout,
     redirect: '/system/user',
     name: '系统管理',
-    meta: { title: '系统管理', icon: 'el-icon-s-help' },
+    alwaysShow: true,
+    meta: { title: '系统管理', icon: 'el-icon-s-help', code: 'system' },
     children: [
       {
         path: 'user',
         name: '用户管理',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'table' }
+        meta: { title: '用户管理', icon: 'table', code: 'system:user' }
       },
       {
         path: 'role',
         name: '角色管理',
         component: () => import('@/views/role/index'),
-        meta: { title: '角色管理', icon: 'table' }
+        meta: { title: '角色管理', icon: 'table', code: 'system:role' }
       },
       {
         path: 'menu',
-        name: '菜单权限管理',
+        name: '菜单权限',
         component: () => import('@/views/menu/index'),
-        meta: { title: '菜单权限管理', icon: 'table' }
+        meta: { title: '菜单权限', icon: 'table', code: 'system:menu' }
       },
       {
         path: 'resource',
         name: '服务管理',
         component: () => import('@/views/resource/index'),
-        meta: { title: '服务管理', icon: 'table' }
+        meta: { title: '服务管理', icon: 'table', code: 'system:resource' }
       }
     ]
-  }
+  },
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () => {
+  return new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
+}
 
 const router = createRouter()
 

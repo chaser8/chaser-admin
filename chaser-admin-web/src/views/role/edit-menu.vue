@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="配置菜单" :before-close="close" @open="open">
+  <el-dialog :visible.sync="show" title="配置权限" :before-close="close" @open="open">
     <el-tree
       ref="menuTree"
       :data="treeData"
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import {getLevelMenuFuncs} from '@/api/menu'
-import {getRoleMenus, updatePermission} from '@/api/role'
+import { getLevelMenuFuncs } from '@/api/menu'
+import { getRoleMenus, updatePermission } from '@/api/role'
 
 export default {
   name: 'EditMenu',
@@ -105,7 +105,11 @@ export default {
                   return false
                 }
               } else if (node.children !== null && node.children.length > 0) {
-                return isLeaf(key, node.children)
+                const leaf = isLeaf(key, node.children)
+                debugger
+                if (leaf !== undefined && leaf !== null) {
+                  return leaf
+                }
               }
             }
           }
@@ -113,12 +117,12 @@ export default {
           const selectCheckedKeys = res.data.map(value => {
             return value.type + '_' + value.id
           })
+          console.log(selectCheckedKeys)
           for (const checkedKey of selectCheckedKeys) {
             if (isLeaf(checkedKey, this.treeData)) {
               checkedKeys.push(checkedKey)
             }
           }
-
           this.$refs.menuTree.setCheckedKeys(checkedKeys)
         }
       })

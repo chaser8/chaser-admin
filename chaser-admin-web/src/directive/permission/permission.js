@@ -2,14 +2,14 @@ import store from '@/store'
 
 function checkPermission(el, binding) {
   const { value } = binding
-  const roles = store.getters && store.getters.roles
+  const functions = store.getters && store.getters.functions
 
   if (value && value instanceof Array) {
     if (value.length > 0) {
-      const permissionRoles = value
+      const permissionFunctions = value
 
-      const hasPermission = roles.some(role => {
-        return permissionRoles.includes(role)
+      const hasPermission = functions.some(func => {
+        return permissionFunctions.includes(func)
       })
 
       if (!hasPermission) {
