@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="textMap[dialogStatus]" :visible.sync="visible" :before-close="close" @open="open">
+  <el-dialog v-el-drag-dialog :title="textMap[dialogStatus]" :visible.sync="visible" :before-close="close" @open="open">
     <el-form ref="dataForm" :rules="rules" :model="formData" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
       <el-form-item v-if="dialogStatus=='create'" label="帐号" prop="username">
         <el-input v-model="formData.username" maxlength="25" show-word-limit />

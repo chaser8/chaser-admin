@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="编辑角色" :visible.sync="visible" @open="open" :before-close="close">
+  <el-dialog v-el-drag-dialog title="编辑角色" :visible.sync="visible" @open="open" :before-close="close">
     <el-transfer v-model="value" :data="roleList" :titles="['可选角色', '已选角色']" :props="transferProps" />
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="updateUserRoles()">

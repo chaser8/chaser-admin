@@ -70,7 +70,7 @@
             <el-button v-permission="['system:role:permission']" type="primary" size="mini" @click="editMenu(row)">
               配置权限
             </el-button>
-            <el-button v-permission="['system:role:delete']"  size="mini" type="danger" @click="del(row)">
+            <el-button v-permission="['system:role:delete']" size="mini" type="danger" @click="del(row)">
               删除
             </el-button>
           </template>

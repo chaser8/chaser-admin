@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {deleteResource, merge, page} from '@/api/resource'
+import { deleteResource, merge, page } from '@/api/resource'
 import Pagination from '@/components/Pagination'
 
 export default {

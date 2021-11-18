@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="配置权限" :before-close="close" @open="open">
+  <el-dialog v-el-drag-dialog :visible.sync="show" title="配置权限" :before-close="close" @open="open">
     <el-tree
       ref="menuTree"
       :data="treeData"
@@ -106,7 +106,6 @@ export default {
                 }
               } else if (node.children !== null && node.children.length > 0) {
                 const leaf = isLeaf(key, node.children)
-                debugger
                 if (leaf !== undefined && leaf !== null) {
                   return leaf
                 }

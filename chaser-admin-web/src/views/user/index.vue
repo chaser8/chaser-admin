@@ -65,10 +65,10 @@
           <el-button v-permission="['system:user:role']" size="mini" type="success" @click="editRole(row)">
             编辑角色
           </el-button>
-          <el-button v-permission="['system:user:freeze']" v-if="row.status=='1000'" size="mini" type="danger" @click="freeze(row)">
+          <el-button v-if="row.status=='1000'" v-permission="['system:user:freeze']" size="mini" type="danger" @click="freeze(row)">
             冻结
           </el-button>
-          <el-button v-permission="['system:user:unfreeze']" v-else size="mini" type="danger" @click="unfreeze(row)">
+          <el-button v-else v-permission="['system:user:unfreeze']" size="mini" type="danger" @click="unfreeze(row)">
             解冻
           </el-button>
         </template>

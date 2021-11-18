@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="dialog-resource" :visible.sync="show" title="关联服务" :before-close="close" width="850px" @open="open">
+  <el-dialog v-el-drag-dialog class="dialog-resource" :visible.sync="show" title="关联服务" :before-close="close" width="850px" @open="open">
     <el-transfer
       v-model="value"
       :data="funcList"

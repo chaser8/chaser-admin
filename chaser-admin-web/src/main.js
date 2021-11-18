@@ -16,6 +16,8 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import sticky from '@/directive/sticky' // 权限判断指令
+import dialog from '@/directive/el-drag-dialog' // 权限判断指令
 
 /**
  * If you don't want to use mock-server
@@ -45,3 +47,5 @@ new Vue({
 })
 // 权限指令
 permission.install(Vue)
+sticky.install(Vue)
+dialog.install(Vue)
