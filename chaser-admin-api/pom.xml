@@ -32,10 +32,10 @@
             <groupId>top.chaser.framework</groupId>
             <artifactId>chaser-starter-web</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>top.chaser.framework</groupId>
             <artifactId>chaser-starter-swagger</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
