@@ -9,7 +9,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <dependencies.version>B-1.0.0.RELEASE</dependencies.version>
+        <dependencies.version>B-1.0.1.RELEASE</dependencies.version>
     </properties>
     <dependencyManagement>
         <dependencies>
