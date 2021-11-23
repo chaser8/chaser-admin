@@ -10,12 +10,12 @@ spring:
   redis:
     database: 5
     port: 6380
-    host: yangzb.com
-    password: redis.123456
+    host: database
+    password: "ENC(P0n5xRQYwNlAVS64Tdm06aJ0fEX6SPjw)"
   application:
     name: chaser-admin-api
   datasource:
-    url: jdbc:mysql://yangzb.com:3307/chaser_admin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://database:3307/chaser_admin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: chaser_admin
     password: "ENC(igdNt88NTF8N2Pol4j33erm67yigN2fB)"
     hikari:
