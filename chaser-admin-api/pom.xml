@@ -9,12 +9,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <dependencies.version>B-1.0.2.RELEASE</dependencies.version>
+        <dependencies.version>B-1.0.3.RELEASE</dependencies.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>top.chaser.framework</groupId>
+                <groupId>top.chaser</groupId>
                 <artifactId>base-dependencies</artifactId>
                 <version>${dependencies.version}</version>
                 <type>pom</type>
@@ -29,11 +29,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>top.chaser.framework</groupId>
+            <groupId>top.chaser</groupId>
             <artifactId>chaser-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.chaser.framework</groupId>
+            <groupId>top.chaser</groupId>
             <artifactId>chaser-starter-swagger</artifactId>
         </dependency>
         <dependency>
@@ -57,7 +57,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>top.chaser.framework</groupId>
+            <groupId>top.chaser</groupId>
             <artifactId>chaser-starter-tkmybatis</artifactId>
             <exclusions>
                 <exclusion>
@@ -75,7 +75,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.chaser.framework</groupId>
+            <groupId>top.chaser</groupId>
             <artifactId>chaser-starter-uaa-authorization-server</artifactId>
         </dependency>
     </dependencies>
