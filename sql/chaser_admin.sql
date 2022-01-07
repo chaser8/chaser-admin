@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : yangzb.com
+ Source Server         : 
  Source Server Type    : MySQL
  Source Server Version : 80020
- Source Host           : yangzb.com:3307
+ Source Host           : 3307
  Source Schema         : chaser_admin
 
  Target Server Type    : MySQL
